@@ -1,0 +1,1 @@
+Hi this is just a little automation script to check if a book exists in my local library and then if it does it will add it to my goodreads shelf because i got too lazy to keep opening and checking the sites on my own but yeah okay thanks
