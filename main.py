@@ -3,10 +3,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from rich.console import Console
+import configparser
 import re
 import sys
 import time
-import configparser
 
 goodreads_sign_in = f'https://www.goodreads.com/ap/signin?language=en_US&openid.assoc_handle=amzn_goodreads_web_na&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.mode=checkid_setup&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.goodreads.com%2Fap-handler%2Fsign-in&siteState=eyJyZXR1cm5fdXJsIjoiaHR0cHM6Ly93d3cuZ29vZHJlYWRzLmNvbS8ifQ%3D%3D'
 goodreads_search_prefix = "https://www.goodreads.com/search?q="
@@ -18,6 +19,8 @@ config.read('config.ini')
 
 goodreads_email = config['goodreads']['email']
 goodreads_password = config['goodreads']['password']
+
+console = Console()
 
 
 def login_to_goodreads(driver):
@@ -36,7 +39,7 @@ def login_to_goodreads(driver):
 
 def goodreads_search(driver, search):
     driver.get(f"{goodreads_search_prefix}{search}")
-    time.sleep(5)
+    time.sleep(3)
     first_book = driver.find_element(By.CLASS_NAME, "wtrButtonContainer")
     progress_trigger = first_book.find_element(
         By.CLASS_NAME, "progressTrigger")
@@ -77,7 +80,7 @@ def main():
 
     found_at_allen = find_at_allen(driver, allen_url)
     if not found_at_allen:
-        print("Book not found at Allen")
+        console.print("[red]Book not found at Allen[/red]")
         driver.quit()
         return
 
@@ -85,9 +88,9 @@ def main():
 
     added = goodreads_search(driver, goodreads_suffix)
     if added:
-        print("Book added to Goodreads")
+        console.print("[green]Book added to Goodreads[/green]")
     else:
-        print("Book already in a shelf")
+        console.print("[blue]Book already in a shelf[/blue]")
 
     driver.quit()
 
