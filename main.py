@@ -64,9 +64,10 @@ def find_at_allen(driver, url):
     first_book_text = second_h2.text
     allen_book = re.sub(r'[^a-zA-Z0-9+]', '',
                         first_book_text.replace(" ", "+").lower())
+    allen_book = re.sub(r'\++', '+', allen_book)
     inputted_book = re.sub(r'[^a-zA-Z0-9+]', '',
                            "+".join(sys.argv[1:]).lower())
-
+    inputted_book = re.sub(r'\++', '+', inputted_book)
     return allen_book == inputted_book
 
 
